@@ -2,6 +2,18 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
 import heapq
+import sys
+import os
+
+def obtener_ruta_recurso(relativa):
+    """ Obtiene la ruta absoluta para recursos, compatible con PyInstaller """
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relativa)
+
+
 
 # -----------------------------------
 # 📐 TAMAÑO
@@ -191,7 +203,8 @@ def set_resultado(texto):
 canvas = tk.Canvas(ventana, width=ANCHO_MAPA, height=ALTO_MAPA, highlightthickness=0)
 canvas.pack(side=tk.RIGHT)
 
-imagen = Image.open("mapa_colombia.jpg").resize((ANCHO_MAPA, ALTO_MAPA))
+ruta_imagen = obtener_ruta_recurso("mapa_colombia.jpg")
+imagen = Image.open(ruta_imagen).resize((ANCHO_MAPA, ALTO_MAPA))
 mapa = ImageTk.PhotoImage(imagen)
 canvas.create_image(0, 0, anchor=tk.NW, image=mapa)
 
